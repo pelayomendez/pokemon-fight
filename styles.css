@@ -1,0 +1,70 @@
+body {
+    background-color: #f2994a;
+}
+.centered-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2994a;
+    flex-direction: column;
+    background-image: url('img/versus.png');
+    background-position: center; 
+    background-repeat: no-repeat;
+}
+.versus {
+    width: 600px;
+    height: 400px;
+    margin: 0 70px 0 90px;
+}
+button {
+    width: 248px;
+    height: 40px;
+    margin: 14px 0;
+    opacity: 0.6;
+    border-radius: 2px;
+    background-color: #eb5757;
+}
+.rectangle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+.rectangle {
+    width: 240px;
+    height: 320px;
+    margin: 0 120px 0 100px;
+    border: solid 9px #f2c94c;
+    background-color: #f2f2f2;
+    background-image: url('img/ball.png');
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.input-container {
+    margin: 20px 0 0 0;
+}
+input {
+    width: 250px;
+    height: 40px;
+    margin: 0 120px 0 100px;
+    border-radius: 2px;
+    background-color: #f2f2f2;
+    border: solid 1px #f2c94c;
+}
+.Fight {
+    width: 142px;
+    height: 68px;
+    margin: 0 50px 0 56px;
+    opacity: 0.6;
+    font-family: Roboto;
+    font-size: 28px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.64;
+    letter-spacing: normal;
+    text-align: center;
+    color: #f2c94c;
+  }
