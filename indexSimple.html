@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Fight!</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 
+    https://confetti.js.org/more.html
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+    <script type="text/javascript">
+        function callPokemonAPI(pokemonName, targetImage){
+            var pokemonImage = document.getElementById(targetImage);
+            var apiUrl = 'https://pokeapi.co/api/v2/pokemon/' + pokemonName + '/';
+            fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const imageUrl = data.sprites.front_default;
+                pokemonImage.style.backgroundImage = "url("+imageUrl+")";
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                });
+            }).catch(err => {
+                // Do something for an error here
+            });
+        }
+
+        function fight(){
+            var pokemon1 = document.getElementById("pokemon1").value;
+            var pokemon2 = document.getElementById("pokemon2").value;
+            callPokemonAPI(pokemon1, 'pokemonImage1');
+            callPokemonAPI(pokemon2, 'pokemonImage2');
+        }
+
+    </script>
+</head>
+<body>
+    <div class="centered-div">
+            <div class="rectangle-container">
+                <div id="pokemonImage1" class="rectangle"></div>
+                <div id="pokemonImage2" class="rectangle"></div>
+            </div>
+            <div class="input-container">
+                <input id="pokemon1" type="text" value="charizard" />
+                <input id="pokemon2" type="text" value="pikachu" />
+              </div>
+            <button onclick="fight()">
+                <span class="Fight">
+                    Fight!
+                  </span>
+            </button>
+        </div>
+    </div>
+</body>
+</html>

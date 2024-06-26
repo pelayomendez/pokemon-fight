@@ -5,25 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokemon Fight!</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- 
+    https://confetti.js.org/more.html
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
     <script type="text/javascript">
-        function callPokemonAPI(pokemonName, targetImage){
-            var pokemonImage = document.getElementById(targetImage);
-            var apiUrl = 'https://pokeapi.co/api/v2/pokemon/' + pokemonName + '/';
-            fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const imageUrl = data.sprites.front_default;
-                pokemonImage.style.backgroundImage = "url("+imageUrl+")";
-            }).catch(err => {
-                // Do something for an error here
+       function callPokemonAPI(pokemonName, targetImage){
+            return new Promise((resolve, reject) => { // Wrap the fetch call in a Promise
+                var pokemonImage = document.getElementById(targetImage);
+                var apiUrl = 'https://pokeapi.co/api/v2/pokemon/' + pokemonName + '/';
+                fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const imageUrl = data.sprites.front_default;
+                    pokemonImage.style.backgroundImage = "url("+imageUrl+")";
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                    });
+                    resolve(); // Resolve the promise when the fetch and operations are complete
+                }).catch(err => {
+                    reject(err); // Reject the promise on error
+                });
             });
         }
 
-        function fight(){
+        async function fight(){
             var pokemon1 = document.getElementById("pokemon1").value;
             var pokemon2 = document.getElementById("pokemon2").value;
-            callPokemonAPI(pokemon1, 'pokemonImage1');
-            callPokemonAPI(pokemon2, 'pokemonImage2');
+            await callPokemonAPI(pokemon1, 'pokemonImage1');
+            await callPokemonAPI(pokemon2, 'pokemonImage2');
+
+            // Randomly add the 'loser' class to one of the images and 'winner' to the other
+            var loserIndex = Math.floor(Math.random() * 2); // Generates 0 or 1 randomly
+            var winnerIndex = loserIndex === 0 ? 1 : 0; // The other image
+            var loserImageId = loserIndex === 0 ? 'pokemonImage1' : 'pokemonImage2';
+            var winnerImageId = winnerIndex === 0 ? 'pokemonImage1' : 'pokemonImage2';
+            document.getElementById(loserImageId).classList.add('loser');
+            document.getElementById(loserImageId).classList.remove('winner');
+            document.getElementById(winnerImageId).classList.add('winner');
+            document.getElementById(winnerImageId).classList.remove('loser');
         }
 
     </script>
