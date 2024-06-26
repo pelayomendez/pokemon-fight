@@ -53,6 +53,7 @@ input {
     background-color: #f2f2f2;
     border: solid 1px #f2c94c;
 }
+
 .Fight {
     width: 142px;
     height: 68px;
@@ -67,4 +68,43 @@ input {
     letter-spacing: normal;
     text-align: center;
     color: #f2c94c;
-  }
+}
+
+
+.loser {
+    /* Flip the image horizontally */
+    transform: scaleX(-1);
+    /* Apply grayscale filter */
+    filter: grayscale(100%);
+    /* Animation */
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) scaleX(-1);
+    }
+    40% {
+        transform: translateY(-30px) scaleX(-1);
+    }
+    60% {
+        transform: translateY(-15px) scaleX(-1);
+    }
+}
+
+.winner {
+    position: relative;
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% {
+        box-shadow: 0 0 10px #f2c94c;
+    }
+    50% {
+        box-shadow: 0 0 20px #f2c94c, 0 0 40px #f2c94c, 0 0 80px #f2c94c;
+    }
+    100% {
+        box-shadow: 0 0 10px #f2c94c;
+    }
+}
