@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Fight!</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 
+    https://confetti.js.org/more.html
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.126.1/build/three.min.js"></script>
+    <script type="text/javascript">
+       function callPokemonAPI(pokemonName, targetCanvasId) {
+            return new Promise((resolve, reject) => {
+                fetch('https://pokeapi.co/api/v2/pokemon/' + pokemonName + '/')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const imageUrl = data.sprites.front_default;
+                        const canvas = document.getElementById(targetCanvasId);
+                        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+                        renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+
+                        const scene = new THREE.Scene();
+                        const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+                        camera.position.z = 4;
+
+                        const textureLoader = new THREE.TextureLoader();
+                        textureLoader.load(imageUrl, (texture) => {
+                            const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+                            // Create an array of materials for each side of the cube, applying the same texture to all sides
+                            const materials = [
+                                material, material, material,
+                                material, material, material
+                            ];
+                            const geometry = new THREE.BoxGeometry(4, 4, 4); // Use BoxGeometry for a cube
+                            const mesh = new THREE.Mesh(geometry, materials);
+                            scene.add(mesh);
+
+                            const animate = function () {
+                                requestAnimationFrame(animate);
+
+                                // Rotate the cube
+                                mesh.rotation.x += 0.01;
+                                mesh.rotation.y += 0.01;
+
+                                renderer.render(scene, camera);
+                            };
+
+                            animate(); // Start the animation loop
+                            resolve(); // Resolve the promise upon successful completion
+                        }, undefined, (error) => {
+                            reject(error); // Reject the promise if there's an error loading the texture
+                        });
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                        reject(error); // Reject the promise if there's an error with the fetch operation
+                    });
+            });
+        }
+
+        async function fight(){
+            var pokemon1 = document.getElementById("pokemon1").value;
+            var pokemon2 = document.getElementById("pokemon2").value;
+            await callPokemonAPI(pokemon1, 'canvas1');
+            await callPokemonAPI(pokemon2, 'canvas2');
+
+            // Randomly add the 'loser' class to one of the images and 'winner' to the other
+            var loserIndex = Math.floor(Math.random() * 2); // Generates 0 or 1 randomly
+            var winnerIndex = loserIndex === 0 ? 1 : 0; // The other image
+            var loserImageId = loserIndex === 0 ? 'canvas1' : 'canvas2';
+            var winnerImageId = winnerIndex === 0 ? 'canvas1' : 'canvas2';
+            document.getElementById(loserImageId).classList.add('loser');
+            document.getElementById(loserImageId).classList.remove('winner');
+            document.getElementById(winnerImageId).classList.add('winner');
+            document.getElementById(winnerImageId).classList.remove('loser');
+        }
+
+    </script>
+</head>
+<body>
+    <div class="centered-div">
+            <div class="rectangle-container">
+                <div id="pokemonImage1"><canvas class="rectangle" id="canvas1"></canvas></div>
+                <div id="pokemonImage2"><canvas class="rectangle" id="canvas2"></canvas></div>
+            </div>
+            <div class="input-container">
+                <input id="pokemon1" type="text" value="charizard" />
+                <input id="pokemon2" type="text" value="pikachu" />
+              </div>
+            <button onclick="fight()">
+                <span class="Fight">
+                    Fight!
+                  </span>
+            </button>
+        </div>
+    </div>
+</body>
+</html>
