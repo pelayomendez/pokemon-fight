@@ -1,3 +1,5 @@
+> **Archived class material.** Built as a teaching example for the *Interaction Design & Development* course at ELISAVA (Barcelona). Kept read-only for students who cloned it. Current course material: https://github.com/pelayomendez/Interaction-Design-and-Development-2026
+
 # Pokemon Fight
 
 ## HTML, CSS, and JavaScript Project: API Interaction Showcase
